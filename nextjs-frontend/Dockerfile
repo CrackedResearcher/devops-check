@@ -2,14 +2,19 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json /frontend/
+# Fix path to match WORKDIR
+COPY package*.json ./
 
-USER node
+# npm install all deps in pckg json files
+RUN npm install
 
-COPY --chown=node:node . /frontend/
+# copy all files from root to /app . 
+COPY . .
 
+# build 
 RUN npm run build
 
-EXPOSE 8080
+# nextjs default port exposed on 3000
+EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
